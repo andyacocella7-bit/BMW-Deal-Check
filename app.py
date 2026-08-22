@@ -226,87 +226,96 @@ TRIMS = {
         "M240i": 53600,
         "M240i xDrive": 55600,
     },
-
     "3 Series": {
         "330i": 48000,
         "330i xDrive": 50000,
         "M340i": 62300,
         "M340i xDrive": 64300,
     },
-
     "4 Series": {
         "430i": 53300,
         "430i xDrive": 55300,
         "M440i": 67100,
         "M440i xDrive": 69100,
     },
-
     "5 Series": {
         "530i": 60500,
         "530i xDrive": 62800,
         "540i xDrive": 67700,
         "550e xDrive": 75500,
     },
-
     "7 Series": {
         "740i": 99800,
         "740i xDrive": 102800,
         "760i xDrive": 125000,
         "750e xDrive": 120000,
     },
-
     "X1": {
         "X1 xDrive28i": 43200,
         "X1 M35i": 52400,
     },
-
     "X2": {
         "X2 xDrive28i": 44700,
         "X2 M35i": 53900,
     },
-
     "X3": {
         "X3 30 xDrive": 51300,
         "X3 M50 xDrive": 66500,
     },
-
     "X5": {
         "X5 sDrive40i": 68300,
         "X5 xDrive40i": 72100,
         "X5 xDrive50e": 76000,
         "X5 M60i": 93600,
     },
-
     "X6": {
         "X6 xDrive40i": 77300,
         "X6 M60i": 98000,
     },
-
     "X7": {
         "X7 xDrive40i": 87500,
         "X7 M60i": 115000,
         "ALPINA XB7": 156000,
     },
-
     "M2": {
         "M2": 69500,
     },
-
     "M3": {
         "M3": 79300,
         "M3 Competition": 83500,
         "M3 Competition xDrive": 88600,
     },
-
     "M4": {
         "M4": 82200,
         "M4 Competition": 86600,
         "M4 Competition xDrive": 91700,
     },
-
     "M5": {
         "M5": 123300,
     }
+}
+
+
+# =========================================================
+# BMW USA MODEL LINKS
+# =========================================================
+
+BMW_LINKS = {
+    "2 Series": "https://www.bmwusa.com/vehicles/2-series.html",
+    "3 Series": "https://www.bmwusa.com/vehicles/3-series.html",
+    "4 Series": "https://www.bmwusa.com/vehicles/4-series.html",
+    "5 Series": "https://www.bmwusa.com/vehicles/5-series.html",
+    "7 Series": "https://www.bmwusa.com/vehicles/7-series/sedan/overview.html",
+    "X1": "https://www.bmwusa.com/vehicles/x-models/x1/sports-activity-vehicle/overview.html",
+    "X2": "https://www.bmwusa.com/vehicles/x-models/x2/sports-activity-coupe/overview.html",
+    "X3": "https://www.bmwusa.com/vehicles/x-models/x3/sports-activity-vehicle/overview.html",
+    "X5": "https://www.bmwusa.com/vehicles/x-models/x5/sports-activity-vehicle/overview.html",
+    "X6": "https://www.bmwusa.com/vehicles/x-models/x6/sports-activity-coupe/overview.html",
+    "X7": "https://www.bmwusa.com/vehicles/x-models/x7/sports-activity-vehicle/overview.html",
+    "M2": "https://www.bmwusa.com/vehicles/m-models/m2-coupe/overview.html",
+    "M3": "https://www.bmwusa.com/vehicles/m-models/m3-sedan/overview.html",
+    "M4": "https://www.bmwusa.com/vehicles/m-models/m4-coupe/overview.html",
+    "M5": "https://www.bmwusa.com/vehicles/m-models/m5-sedan/overview.html",
 }
 
 
@@ -327,7 +336,7 @@ st.markdown("""
 
 
 # =========================================================
-# VEHICLE
+# VEHICLE DETAILS
 # =========================================================
 
 st.markdown("""
@@ -405,14 +414,14 @@ with col2:
 
 
 # =========================================================
-# OWNERS + OPTIONS
+# HISTORY + OPTIONS
 # =========================================================
 
 st.markdown("""
 <div class="card">
 <div class="card-title">🔧 Vehicle History & Options</div>
 <div class="card-sub">
-These details can meaningfully affect what a used BMW is worth.
+These details can affect the estimated value.
 </div>
 </div>
 """, unsafe_allow_html=True)
@@ -428,7 +437,11 @@ with c1:
 
     seller = st.selectbox(
         "Seller type",
-        ["Franchise BMW dealer", "Independent dealer", "Private seller"]
+        [
+            "Franchise BMW dealer",
+            "Independent dealer",
+            "Private seller"
+        ]
     )
 
 with c2:
@@ -449,30 +462,18 @@ with c2:
 
 
 # =========================================================
-# ANALYSIS
+# ANALYZE
 # =========================================================
 
 if st.button("Analyze My BMW  →", use_container_width=True):
 
     msrp = TRIMS[model][trim]
 
-    # -----------------------------------------------------
-    # AGE
-    # -----------------------------------------------------
-
     age = max(0, 2026 - year)
 
-    # Rough depreciation model.
-    # This is intentionally an estimate until real listing
-    # data is connected.
     depreciation = 0.84 ** age
 
     estimated = msrp * depreciation
-
-
-    # -----------------------------------------------------
-    # MILEAGE
-    # -----------------------------------------------------
 
     expected_miles = max(5000, age * 12000)
 
@@ -487,11 +488,6 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         min(1.08, mileage_factor)
     )
 
-
-    # -----------------------------------------------------
-    # CONDITION
-    # -----------------------------------------------------
-
     condition_factor = {
         "Poor": 0.82,
         "Fair": 0.92,
@@ -499,32 +495,17 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         "Excellent": 1.07
     }[condition]
 
-
-    # -----------------------------------------------------
-    # ACCIDENTS
-    # -----------------------------------------------------
-
     accident_factor = {
         "None reported": 1.00,
         "One or more reported": 0.87,
         "Unknown": 0.95
     }[accident]
 
-
-    # -----------------------------------------------------
-    # SERVICE
-    # -----------------------------------------------------
-
     service_factor = {
         "Strong / documented": 1.04,
         "Some records": 1.00,
         "Unknown": 0.94
     }[service]
-
-
-    # -----------------------------------------------------
-    # OWNERS
-    # -----------------------------------------------------
 
     owner_factor = {
         "1 owner": 1.02,
@@ -534,31 +515,16 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         "Unknown": 0.97
     }[owners]
 
-
-    # -----------------------------------------------------
-    # SELLER
-    # -----------------------------------------------------
-
     seller_factor = {
         "Franchise BMW dealer": 1.04,
         "Independent dealer": 1.00,
         "Private seller": 0.96
     }[seller]
 
-
-    # -----------------------------------------------------
-    # OPTIONS
-    # -----------------------------------------------------
-
     option_bonus = min(
         0.08,
         len(options) * 0.012
     )
-
-
-    # -----------------------------------------------------
-    # FINAL ESTIMATE
-    # -----------------------------------------------------
 
     fair_value = (
         estimated
@@ -574,11 +540,6 @@ if st.button("Analyze My BMW  →", use_container_width=True):
     low_value = fair_value * 0.93
     high_value = fair_value * 1.07
 
-
-    # -----------------------------------------------------
-    # DEAL SCORE
-    # -----------------------------------------------------
-
     ratio = asking / fair_value
 
     score = round(
@@ -587,32 +548,23 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
     score = max(0, min(100, score))
 
-
-    # -----------------------------------------------------
-    # VERDICT
-    # -----------------------------------------------------
-
     if ratio <= 0.90:
-
         verdict = "GREAT DEAL"
         verdict_class = "good"
 
     elif ratio <= 1.05:
-
         verdict = "FAIR DEAL"
         verdict_class = "fair"
 
     else:
-
         verdict = "OVERPRICED"
         verdict_class = "bad"
-
 
     difference = asking - fair_value
 
 
     # =====================================================
-    # SUMMARY
+    # RESULTS
     # =====================================================
 
     st.markdown("""
@@ -644,10 +596,6 @@ if st.button("Analyze My BMW  →", use_container_width=True):
             f"${asking:,.0f}"
         )
 
-
-    # =====================================================
-    # RESULT
-    # =====================================================
 
     st.markdown(
         f"""
@@ -686,7 +634,28 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 
     # =====================================================
-    # PRICE EXPLANATION
+    # BMW BUTTON
+    # =====================================================
+
+    st.markdown("### 🔗 Explore This BMW")
+
+    st.link_button(
+        f"View {model} on BMW USA →",
+        BMW_LINKS.get(
+            model,
+            "https://www.bmwusa.com/"
+        ),
+        use_container_width=True
+    )
+
+    st.caption(
+        "Opens BMW USA's official model page. "
+        "The page may show current model information rather than the exact used vehicle."
+    )
+
+
+    # =====================================================
+    # PRICE DIFFERENCE
     # =====================================================
 
     if difference > 0:
@@ -705,7 +674,7 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 
     # =====================================================
-    # WHY?
+    # WHY
     # =====================================================
 
     st.markdown("""
@@ -763,7 +732,7 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 
     # =====================================================
-    # BUYING CHECKLIST
+    # CHECKLIST
     # =====================================================
 
     st.markdown("""
@@ -823,10 +792,13 @@ st.markdown("""
 <div class="footer">
 BMW DealCheck is an independent educational tool and is not
 affiliated with or endorsed by BMW AG.<br><br>
+
 DealCheck estimates are not professional appraisals.
 Actual vehicle values vary based on location, configuration,
 condition, history, options and current market demand.
+
 <br><br>
-BMW DealCheck • V2
+
+BMW DealCheck • V3
 </div>
 """, unsafe_allow_html=True)
