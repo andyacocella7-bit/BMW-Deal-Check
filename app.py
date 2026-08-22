@@ -6,23 +6,28 @@ st.set_page_config(
     layout="wide"
 )
 
-# =========================================================
-# CUSTOM STYLING
-# =========================================================
+# =========================
+# STYLE
+# =========================
 
 st.markdown("""
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
 
 .stApp {
     background:
-        radial-gradient(circle at 50% -10%, rgba(35,110,255,.20), transparent 35%),
-        linear-gradient(180deg, #05070b 0%, #0a0e15 50%, #05070b 100%);
+        radial-gradient(circle at 50% 0%, rgba(35,115,255,0.16), transparent 35%),
+        linear-gradient(180deg, #05070b 0%, #090d14 55%, #05070b 100%);
     color: white;
 }
 
 .block-container {
-    max-width: 1150px;
-    padding-top: 25px;
+    max-width: 1100px;
+    padding-top: 35px;
     padding-bottom: 60px;
 }
 
@@ -38,148 +43,152 @@ footer {
     visibility: hidden;
 }
 
-/* ================= HERO ================= */
+/* HERO */
 
-.hero {
+.hero-title {
     text-align: center;
-    padding: 25px 10px 35px;
-}
-
-.logo {
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    margin-bottom: 18px;
-    box-shadow: 0 0 35px rgba(40,120,255,.25);
-}
-
-.badge {
-    display: inline-block;
-    padding: 7px 15px;
-    border-radius: 30px;
-    border: 1px solid rgba(65,140,255,.5);
-    background: rgba(30,90,190,.10);
-    color: #75aaff;
-    font-size: 11px;
+    font-size: 64px;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: -3px;
+    margin-bottom: 5px;
 }
 
-.hero h1 {
-    font-size: clamp(45px, 7vw, 76px);
-    font-weight: 850;
-    letter-spacing: -4px;
-    margin: 12px 0 0;
-    line-height: 1;
+.hero-title span {
+    color: #3d8bff;
 }
 
-.blue {
-    color: #4b91ff;
-}
-
-.hero p {
+.hero-subtitle {
+    text-align: center;
+    color: #8994a5;
+    font-size: 17px;
     max-width: 650px;
-    margin: 18px auto 0;
-    color: #929cab;
-    font-size: 16px;
-    line-height: 1.6;
+    margin: 0 auto 35px auto;
 }
 
-/* ================= CARDS ================= */
+/* LOGO */
 
-.card {
-    background: rgba(15,20,29,.88);
-    border: 1px solid rgba(255,255,255,.075);
+.logo-circle {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    margin: 0 auto 18px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, #111822, #070a0f);
+    border: 1px solid rgba(75,145,255,0.4);
+    box-shadow: 0 0 35px rgba(45,125,255,0.18);
+    font-size: 25px;
+    font-weight: 800;
+    color: white;
+}
+
+/* CARDS */
+
+.section {
+    background: rgba(15,20,29,0.88);
+    border: 1px solid rgba(255,255,255,0.07);
     border-radius: 20px;
     padding: 25px;
     margin-bottom: 20px;
-    box-shadow: 0 18px 50px rgba(0,0,0,.22);
 }
 
-.card-title {
+.section-title {
     font-size: 21px;
     font-weight: 750;
 }
 
-.card-subtitle {
-    color: #7e899a;
+.section-subtitle {
+    color: #7f8998;
     font-size: 14px;
-    margin-top: 5px;
+    margin-top: 4px;
+    margin-bottom: 20px;
 }
 
-/* ================= INPUTS ================= */
+/* INPUTS */
 
 label {
-    color: #d5dbe5 !important;
-    font-weight: 650 !important;
+    color: #d8dee8 !important;
+    font-weight: 600 !important;
 }
 
 div[data-baseweb="input"] > div,
 div[data-baseweb="select"] > div {
-    background: #10151e !important;
+    background: #10151d !important;
     border-color: #28313e !important;
-    border-radius: 11px !important;
+    border-radius: 10px !important;
 }
 
-div[data-baseweb="input"] input {
+input {
     color: white !important;
 }
 
-/* ================= BUTTON ================= */
+/* BUTTON */
 
 .stButton > button {
     height: 58px;
-    border-radius: 13px;
+    border-radius: 12px;
     border: none;
-    background: linear-gradient(100deg,#1468ff,#4b91ff);
+    background: linear-gradient(100deg, #1468ff, #4b92ff);
     color: white;
     font-size: 17px;
     font-weight: 800;
-    box-shadow: 0 10px 30px rgba(30,110,255,.25);
-    transition: .2s;
+    box-shadow: 0 12px 30px rgba(20,105,255,0.22);
 }
 
 .stButton > button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(30,110,255,.38);
 }
 
-/* ================= RESULT ================= */
+/* RESULT */
 
-.result-card {
+.result-box {
     background:
-        radial-gradient(circle at 90% 10%, rgba(45,130,255,.15), transparent 35%),
-        linear-gradient(145deg,#151d2a,#080c13);
-    border: 1px solid rgba(70,145,255,.25);
+        radial-gradient(circle at 90% 10%, rgba(40,130,255,0.16), transparent 35%),
+        linear-gradient(145deg, #151d2a, #080c12);
+    border: 1px solid rgba(70,145,255,0.25);
     border-radius: 24px;
     padding: 30px;
     margin-top: 30px;
-    box-shadow: 0 25px 70px rgba(0,0,0,.35);
 }
 
-.result-label {
-    color: #7f8b9d;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+.small-label {
+    color: #7e8999;
     font-size: 11px;
     font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
 }
 
-.big-price {
-    font-size: 40px;
-    font-weight: 850;
+.price {
+    font-size: 38px;
+    font-weight: 800;
     margin-top: 5px;
 }
 
-.score-number {
-    font-size: 68px;
-    font-weight: 900;
-    color: #4d91ff;
-    line-height: 1;
+.score {
+    font-size: 62px;
+    font-weight: 800;
+    color: #4b91ff;
+}
+
+.score-bar {
+    width: 100%;
+    height: 9px;
+    background: #242c38;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.score-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1265ff, #5ca0ff);
+    border-radius: 20px;
 }
 
 .good {
-    color: #36d58b;
+    color: #35d58b;
 }
 
 .fair {
@@ -191,142 +200,99 @@ div[data-baseweb="input"] input {
 }
 
 .verdict {
-    font-size: 27px;
-    font-weight: 850;
-    margin-top: 15px;
+    font-size: 26px;
+    font-weight: 800;
+    margin-top: 20px;
 }
 
-/* ================= SCORE BAR ================= */
+/* CHECKLIST */
 
-.score-bar {
-    height: 10px;
-    width: 100%;
-    background: #222a35;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-top: 15px;
+.check {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 13px;
+    padding: 16px;
+    margin-bottom: 10px;
 }
 
-.score-fill {
-    height: 100%;
-    background: linear-gradient(90deg,#1265ff,#54a0ff);
-    border-radius: 20px;
+.check-title {
+    font-weight: 700;
 }
 
-/* ================= INFO ================= */
-
-.info {
-    background: rgba(255,255,255,.035);
-    border: 1px solid rgba(255,255,255,.065);
-    border-radius: 14px;
-    padding: 18px;
-    margin-top: 14px;
+.check-text {
+    color: #858f9e;
+    font-size: 13px;
+    margin-top: 3px;
 }
 
-.info-title {
-    font-weight: 750;
-    color: white;
-}
-
-.info-text {
-    color: #929dac;
-    font-size: 14px;
-    margin-top: 5px;
-    line-height: 1.5;
-}
-
-/* ================= FOOTER ================= */
+/* FOOTER */
 
 .footer {
     text-align: center;
-    color: #596373;
+    color: #555f6e;
     font-size: 11px;
-    margin-top: 50px;
+    margin-top: 45px;
     line-height: 1.7;
 }
 
-/* ================= MOBILE ================= */
-
-@media(max-width:700px) {
-
-    .hero {
-        padding-top: 10px;
-    }
-
-    .hero h1 {
-        font-size: 45px;
+@media (max-width: 700px) {
+    .hero-title {
+        font-size: 43px;
         letter-spacing: -2px;
     }
 
-    .logo {
-        width: 70px;
-        height: 70px;
+    .price {
+        font-size: 29px;
     }
 
-    .card,
-    .result-card {
-        padding: 20px;
+    .score {
+        font-size: 52px;
     }
-
-    .score-number {
-        font-size: 55px;
-    }
-
-    .big-price {
-        font-size: 30px;
-    }
-
 }
-
 </style>
 """, unsafe_allow_html=True)
 
 
-# =========================================================
+# =========================
 # HERO
-# =========================================================
+# =========================
 
-st.markdown("""
-<div class="hero">
+st.markdown(
+    '<div class="logo-circle">BMW</div>',
+    unsafe_allow_html=True
+)
 
-    <img
-        class="logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg"
-    >
+st.markdown(
+    '<div class="hero-title">BMW <span>DealCheck</span></div>',
+    unsafe_allow_html=True
+)
 
-    <div class="badge">
-        INDEPENDENT BMW DEAL ANALYZER
-    </div>
-
-    <h1>
-        BMW <span class="blue">DealCheck</span>
-    </h1>
-
-    <p>
-        Analyze a BMW listing in seconds and see whether the asking price
-        looks like a <strong>good deal, fair deal, or overpriced.</strong>
-    </p>
-
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<div class="hero-subtitle">'
+    'Find out whether a BMW listing looks like a great deal, '
+    'a fair price, or one you should negotiate.'
+    '</div>',
+    unsafe_allow_html=True
+)
 
 
-# =========================================================
-# VEHICLE INFORMATION
-# =========================================================
+# =========================
+# VEHICLE DETAILS
+# =========================
 
-st.markdown("""
-<div class="card">
-    <div class="card-title">Vehicle Details</div>
-    <div class="card-subtitle">
-        Enter the information from the listing you're considering.
-    </div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<div class="section">'
+    '<div class="section-title">Vehicle Details</div>'
+    '<div class="section-subtitle">'
+    'Enter the information from the BMW listing.'
+    '</div>'
+    '</div>',
+    unsafe_allow_html=True
+)
 
-col1, col2 = st.columns(2, gap="large")
+left, right = st.columns(2, gap="large")
 
-with col1:
+with left:
 
     year = st.number_input(
         "Model year",
@@ -360,7 +326,7 @@ with col1:
         ]
     )
 
-with col2:
+with right:
 
     asking = st.number_input(
         "Asking price ($)",
@@ -382,7 +348,7 @@ with col2:
     )
 
     accident = st.selectbox(
-        "Known accident history",
+        "Accident history",
         [
             "None reported",
             "One or more reported",
@@ -400,13 +366,16 @@ with col2:
     )
 
 
-# =========================================================
-# ANALYSIS
-# =========================================================
+# =========================
+# ANALYZE
+# =========================
 
-if st.button("Analyze BMW Deal  →", use_container_width=True):
+if st.button(
+    "Analyze My BMW  →",
+    use_container_width=True
+):
 
-    base = {
+    base_values = {
         "3 Series": 32000,
         "5 Series": 43000,
         "7 Series": 58000,
@@ -417,14 +386,16 @@ if st.button("Analyze BMW Deal  →", use_container_width=True):
         "M3": 62000,
         "M4": 65000,
         "M5": 78000
-    }[model]
+    }
+
+    base = base_values[model]
 
     age = max(0, 2026 - year)
 
     estimated = base * (0.87 ** age)
 
     mileage_factor = max(
-        .65,
+        0.65,
         min(
             1.10,
             1.05 - max(0, mileage - 12000) / 100000
@@ -432,22 +403,22 @@ if st.button("Analyze BMW Deal  →", use_container_width=True):
     )
 
     condition_factor = {
-        "Poor": .82,
-        "Fair": .92,
+        "Poor": 0.82,
+        "Fair": 0.92,
         "Good": 1.00,
         "Excellent": 1.06
     }[condition]
 
     accident_factor = {
         "None reported": 1.00,
-        "One or more reported": .88,
-        "Unknown": .96
+        "One or more reported": 0.88,
+        "Unknown": 0.96
     }[accident]
 
     service_factor = {
         "Strong / documented": 1.03,
         "Some records": 1.00,
-        "Unknown": .95
+        "Unknown": 0.95
     }[service]
 
     fair_value = (
@@ -464,203 +435,186 @@ if st.button("Analyze BMW Deal  →", use_container_width=True):
         0,
         min(
             100,
-            round(100 - (ratio - .85) * 180)
+            round(100 - (ratio - 0.85) * 180)
         )
     )
 
-    if ratio <= .92:
-        verdict = "🟢 GOOD DEAL"
+    if ratio <= 0.92:
+        verdict = "GOOD DEAL"
         verdict_class = "good"
     elif ratio <= 1.05:
-        verdict = "🟡 FAIR DEAL"
+        verdict = "FAIR DEAL"
         verdict_class = "fair"
     else:
-        verdict = "🔴 OVERPRICED"
+        verdict = "OVERPRICED"
         verdict_class = "bad"
 
     difference = asking - fair_value
 
 
-    # =====================================================
+    # =========================
     # VEHICLE SUMMARY
-    # =====================================================
+    # =========================
 
-    st.markdown("""
-    <div class="card">
-        <div class="card-title">Your BMW</div>
-        <div class="card-subtitle">
-            Vehicle information used in the analysis.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section">'
+        '<div class="section-title">Your BMW</div>'
+        '<div class="section-subtitle">'
+        'What we analyzed'
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
-    v1, v2, v3 = st.columns(3)
+    a, b, c = st.columns(3)
 
-    with v1:
-        st.metric("Model", f"{year} {model}")
+    with a:
+        st.metric("Vehicle", f"{year} {model}")
 
-    with v2:
+    with b:
         st.metric("Mileage", f"{mileage:,} mi")
 
-    with v3:
-        st.metric("Asking Price", f"${asking:,.0f}")
+    with c:
+        st.metric("Asking", f"${asking:,.0f}")
 
 
-    # =====================================================
-    # RESULT
-    # =====================================================
+    # =========================
+    # RESULTS
+    # =========================
 
-    st.markdown("""
-    <div class="result-card">
-        <div class="result-label">
-            DealCheck Result
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        '<div class="result-box">'
+        '<div class="small-label">DealCheck Result</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
-    r1, r2 = st.columns(2, gap="large")
+    r1, r2 = st.columns(2)
 
     with r1:
 
         st.markdown(
-            '<div class="result-label">Estimated Fair Value</div>',
+            '<div class="small-label">Estimated Fair Value</div>',
             unsafe_allow_html=True
         )
 
         st.markdown(
-            f'<div class="big-price">'
-            f'${fair_value*.93:,.0f} – ${fair_value*1.07:,.0f}'
+            f'<div class="price">'
+            f'${fair_value * 0.93:,.0f} – '
+            f'${fair_value * 1.07:,.0f}'
             f'</div>',
             unsafe_allow_html=True
         )
 
-        st.caption(
-            "Estimated range based on the information provided."
-        )
+        st.caption("Estimated market range")
 
     with r2:
 
         st.markdown(
-            '<div class="result-label">Deal Score</div>',
+            '<div class="small-label">Deal Score</div>',
             unsafe_allow_html=True
         )
 
         st.markdown(
-            f'<div class="score-number">{score}/100</div>',
+            f'<div class="score">{score}/100</div>',
             unsafe_allow_html=True
         )
 
         st.markdown(
-            f"""
-            <div class="score-bar">
-                <div class="score-fill" style="width:{score}%"></div>
-            </div>
-            """,
+            f'<div class="score-bar">'
+            f'<div class="score-fill" '
+            f'style="width:{score}%"></div>'
+            f'</div>',
             unsafe_allow_html=True
         )
 
     st.markdown(
-        f'<div class="verdict {verdict_class}">{verdict}</div>',
+        f'<div class="verdict {verdict_class}">'
+        f'{verdict}'
+        f'</div>',
         unsafe_allow_html=True
     )
 
 
-    # =====================================================
+    # =========================
     # PRICE DIFFERENCE
-    # =====================================================
+    # =========================
 
     if difference >= 0:
 
-        message = (
+        st.warning(
             f"The asking price is approximately "
-            f"<strong>${difference:,.0f} above</strong> "
-            f"the estimated fair value."
+            f"${difference:,.0f} above the estimated fair value."
         )
 
     else:
 
-        message = (
+        st.success(
             f"The asking price is approximately "
-            f"<strong>${abs(difference):,.0f} below</strong> "
-            f"the estimated fair value."
+            f"${abs(difference):,.0f} below the estimated fair value."
         )
 
+
+    # =========================
+    # CHECKLIST
+    # =========================
+
     st.markdown(
-        f"""
-        <div class="info">
-            <div class="info-title">
-                💰 Price Analysis
-            </div>
-            <div class="info-text">
-                {message}
-            </div>
-        </div>
-        """,
+        '<div class="section">'
+        '<div class="section-title">Before You Buy</div>'
+        '<div class="section-subtitle">'
+        'A good price does not automatically mean it is a good car.'
+        '</div>'
+        '</div>',
         unsafe_allow_html=True
     )
 
-
-    # =====================================================
-    # BUYER CHECKLIST
-    # =====================================================
-
-    st.markdown("""
-    <div class="card" style="margin-top:30px;">
-        <div class="card-title">
-            Before You Buy
-        </div>
-
-        <div class="card-subtitle">
-            Price is only one part of the deal.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    checks = [
-        ("Vehicle history", "Check accident history, title status and ownership."),
-        ("Pre-purchase inspection", "Have an independent mechanic inspect the vehicle."),
-        ("Service records", "Look for consistent maintenance and documented repairs."),
-        ("Tires & brakes", "Check remaining tread and brake condition."),
-        ("Options", "Verify engine, drivetrain, packages and major options.")
+    checklist = [
+        (
+            "Vehicle history",
+            "Check accident history, title status and ownership."
+        ),
+        (
+            "Pre-purchase inspection",
+            "Have an independent mechanic inspect the vehicle."
+        ),
+        (
+            "Service records",
+            "Look for consistent maintenance and documented repairs."
+        ),
+        (
+            "Tires & brakes",
+            "Check remaining tread and brake condition."
+        ),
+        (
+            "Options & packages",
+            "Verify engine, drivetrain and major options."
+        )
     ]
 
-    for title, description in checks:
+    for title, description in checklist:
 
         st.markdown(
-            f"""
-            <div class="info">
-                <div class="info-title">
-                    ✓ {title}
-                </div>
-
-                <div class="info-text">
-                    {description}
-                </div>
-            </div>
-            """,
+            f'<div class="check">'
+            f'<div class="check-title">✓ {title}</div>'
+            f'<div class="check-text">{description}</div>'
+            f'</div>',
             unsafe_allow_html=True
         )
 
 
-# =========================================================
+# =========================
 # FOOTER
-# =========================================================
+# =========================
 
-st.markdown("""
-<div class="footer">
-
-BMW DealCheck is an independent educational tool and is
-not affiliated with or endorsed by BMW AG.
-
-<br><br>
-
-Estimates are not professional appraisals and actual vehicle
-values can vary based on location, options, condition,
-history, market demand and other factors.
-
-<br><br>
-
-BMW DealCheck • MVP
-
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    '<div class="footer">'
+    'BMW DealCheck is an independent educational tool and is not '
+    'affiliated with or endorsed by BMW AG.<br><br>'
+    'Estimates are not professional appraisals. Actual values can '
+    'vary based on location, options, condition, history and market demand.'
+    '<br><br>'
+    'BMW DealCheck • MVP'
+    '</div>',
+    unsafe_allow_html=True
+)
