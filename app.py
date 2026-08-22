@@ -1,4 +1,5 @@
 import streamlit as st
+from urllib.parse import urlparse
 
 st.set_page_config(
     page_title="BMW DealCheck",
@@ -166,9 +167,17 @@ label {
     background: linear-gradient(90deg,#1265ff,#65a5ff);
 }
 
-.good { color: #35d58b; }
-.fair { color: #ffc857; }
-.bad { color: #ff5c68; }
+.good {
+    color: #35d58b;
+}
+
+.fair {
+    color: #ffc857;
+}
+
+.bad {
+    color: #ff5c68;
+}
 
 .verdict {
     font-size: 27px;
@@ -200,6 +209,13 @@ label {
     font-size: 11px;
     line-height: 1.7;
     margin-top: 45px;
+}
+
+.small-note {
+    color: #707b8b;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 8px;
 }
 
 @media(max-width:700px) {
@@ -297,7 +313,7 @@ TRIMS = {
 
 
 # =========================================================
-# BMW USA MODEL LINKS
+# BMW LINKS
 # =========================================================
 
 BMW_LINKS = {
@@ -320,19 +336,104 @@ BMW_LINKS = {
 
 
 # =========================================================
+# SESSION STATE
+# =========================================================
+
+if "listing_url" not in st.session_state:
+    st.session_state.listing_url = ""
+
+if "listing_opened" not in st.session_state:
+    st.session_state.listing_opened = False
+
+
+# =========================================================
 # HERO
 # =========================================================
 
 st.markdown("""
 <div class="hero">
+
     <div class="logo">BMW</div>
-    <h1>BMW <span class="blue">DealCheck</span></h1>
+
+    <h1>
+        BMW <span class="blue">DealCheck</span>
+    </h1>
+
     <p>
         Analyze a BMW listing and see whether you're looking at
         a great deal, a fair price, or an overpriced car.
     </p>
+
 </div>
 """, unsafe_allow_html=True)
+
+
+# =========================================================
+# LISTING URL
+# =========================================================
+
+st.markdown("""
+<div class="card">
+
+<div class="card-title">
+🔗 Analyze a BMW Listing
+</div>
+
+<div class="card-sub">
+Paste the URL of the BMW listing you want to check.
+We'll open it for you, then you can confirm the vehicle details below.
+</div>
+
+</div>
+""", unsafe_allow_html=True)
+
+listing_url = st.text_input(
+    "BMW listing URL",
+    value=st.session_state.listing_url,
+    placeholder="https://example.com/bmw-listing",
+    label_visibility="collapsed"
+)
+
+if st.button("Open Listing  →", use_container_width=True):
+
+    clean_url = listing_url.strip()
+
+    if not clean_url:
+        st.error("Please paste a listing URL first.")
+
+    elif not clean_url.startswith(("http://", "https://")):
+        st.error("Please enter a complete URL beginning with https://")
+
+    else:
+        parsed = urlparse(clean_url)
+
+        if not parsed.netloc:
+            st.error("That doesn't look like a valid web address.")
+
+        else:
+            st.session_state.listing_url = clean_url
+            st.session_state.listing_opened = True
+            st.success(
+                "Listing saved. Open it below, then confirm the details."
+            )
+
+
+if st.session_state.listing_opened and st.session_state.listing_url:
+
+    st.link_button(
+        "🌐 Open BMW Listing in New Tab",
+        st.session_state.listing_url,
+        type="primary",
+        width="stretch"
+    )
+
+    st.markdown(
+        '<div class="small-note">'
+        'DealCheck does not automatically scrape the listing. '
+        'Use the listing to verify the details you enter below.'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
 
 # =========================================================
@@ -341,10 +442,15 @@ st.markdown("""
 
 st.markdown("""
 <div class="card">
-<div class="card-title">🚘 Vehicle Details</div>
-<div class="card-sub">
-Enter the information from the BMW listing.
+
+<div class="card-title">
+🚘 Confirm Vehicle Details
 </div>
+
+<div class="card-sub">
+Enter the information shown on the listing.
+</div>
+
 </div>
 """, unsafe_allow_html=True)
 
@@ -390,7 +496,12 @@ with col2:
 
     condition = st.select_slider(
         "Overall condition",
-        options=["Poor", "Fair", "Good", "Excellent"],
+        options=[
+            "Poor",
+            "Fair",
+            "Good",
+            "Excellent"
+        ],
         value="Good"
     )
 
@@ -419,10 +530,15 @@ with col2:
 
 st.markdown("""
 <div class="card">
-<div class="card-title">🔧 Vehicle History & Options</div>
+
+<div class="card-title">
+🔧 Vehicle History & Options
+</div>
+
 <div class="card-sub">
 These details can affect the estimated value.
 </div>
+
 </div>
 """, unsafe_allow_html=True)
 
@@ -431,8 +547,14 @@ c1, c2 = st.columns(2, gap="large")
 with c1:
 
     owners = st.selectbox(
-        "Number of previous owners",
-        ["1 owner", "2 owners", "3 owners", "4+ owners", "Unknown"]
+        "Previous owners",
+        [
+            "1 owner",
+            "2 owners",
+            "3 owners",
+            "4+ owners",
+            "Unknown"
+        ]
     )
 
     seller = st.selectbox(
@@ -465,7 +587,11 @@ with c2:
 # ANALYZE
 # =========================================================
 
-if st.button("Analyze My BMW  →", use_container_width=True):
+if st.button(
+    "Analyze My BMW  →",
+    type="primary",
+    use_container_width=True
+):
 
     msrp = TRIMS[model][trim]
 
@@ -475,7 +601,10 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
     estimated = msrp * depreciation
 
-    expected_miles = max(5000, age * 12000)
+    expected_miles = max(
+        5000,
+        age * 12000
+    )
 
     mileage_difference = mileage - expected_miles
 
@@ -546,17 +675,23 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         100 - ((ratio - 0.80) * 200)
     )
 
-    score = max(0, min(100, score))
+    score = max(
+        0,
+        min(100, score)
+    )
 
     if ratio <= 0.90:
+
         verdict = "GREAT DEAL"
         verdict_class = "good"
 
     elif ratio <= 1.05:
+
         verdict = "FAIR DEAL"
         verdict_class = "fair"
 
     else:
+
         verdict = "OVERPRICED"
         verdict_class = "bad"
 
@@ -569,28 +704,37 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">📊 Analysis</div>
+
+    <div class="card-title">
+    📊 Deal Analysis
+    </div>
+
     <div class="card-sub">
     Here's what DealCheck estimates for this BMW.
     </div>
+
     </div>
     """, unsafe_allow_html=True)
+
 
     a, b, c = st.columns(3)
 
     with a:
+
         st.metric(
             "Vehicle",
             f"{year} {trim}"
         )
 
     with b:
+
         st.metric(
             "Mileage",
             f"{mileage:,} mi"
         )
 
     with c:
+
         st.metric(
             "Asking Price",
             f"${asking:,.0f}"
@@ -620,7 +764,10 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         </div>
 
         <div class="bar">
-            <div class="fill" style="width:{score}%"></div>
+            <div
+                class="fill"
+                style="width:{score}%"
+            ></div>
         </div>
 
         <div class="verdict {verdict_class}">
@@ -634,23 +781,38 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 
     # =====================================================
-    # BMW BUTTON
+    # LISTING + BMW LINKS
     # =====================================================
 
-    st.markdown("### 🔗 Explore This BMW")
+    st.markdown("### 🔗 Quick Links")
 
-    st.link_button(
-        f"View {model} on BMW USA →",
-        BMW_LINKS.get(
-            model,
-            "https://www.bmwusa.com/"
-        ),
-        use_container_width=True
-    )
+    link1, link2 = st.columns(2)
+
+    with link1:
+
+        if st.session_state.listing_url:
+
+            st.link_button(
+                "🌐 Re-open Listing",
+                st.session_state.listing_url,
+                width="stretch"
+            )
+
+    with link2:
+
+        st.link_button(
+            f"🚗 View {model} on BMW USA",
+            BMW_LINKS.get(
+                model,
+                "https://www.bmwusa.com/"
+            ),
+            width="stretch"
+        )
+
 
     st.caption(
-        "Opens BMW USA's official model page. "
-        "The page may show current model information rather than the exact used vehicle."
+        "BMW USA opens the official model page. "
+        "It may show current model information rather than the exact used vehicle."
     )
 
 
@@ -661,70 +823,118 @@ if st.button("Analyze My BMW  →", use_container_width=True):
     if difference > 0:
 
         st.warning(
-            f"⚠️ You're approximately "
-            f"**${difference:,.0f} above** the current DealCheck estimate."
+            f"⚠️ The asking price is approximately "
+            f"**${difference:,.0f} above** the DealCheck estimate."
         )
 
     else:
 
         st.success(
-            f"💰 You're approximately "
-            f"**${abs(difference):,.0f} below** the current DealCheck estimate."
+            f"💰 The asking price is approximately "
+            f"**${abs(difference):,.0f} below** the DealCheck estimate."
         )
 
 
     # =====================================================
-    # WHY
+    # EXPLANATION
     # =====================================================
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">🧠 Why DealCheck scored it this way</div>
+
+    <div class="card-title">
+    🧠 Why DealCheck scored it this way
+    </div>
+
     </div>
     """, unsafe_allow_html=True)
 
+
     explanations = []
 
+
     if mileage_factor >= 1:
+
         explanations.append(
-            ("Mileage", "Mileage is at or below the estimated average.")
+            (
+                "Mileage",
+                "Mileage is at or below the estimated average."
+            )
         )
+
     else:
+
         explanations.append(
-            ("Mileage", "Mileage is above the estimated average.")
+            (
+                "Mileage",
+                "Mileage is above the estimated average."
+            )
         )
+
 
     if condition == "Excellent":
+
         explanations.append(
-            ("Condition", "Excellent condition adds value.")
+            (
+                "Condition",
+                "Excellent condition adds value."
+            )
         )
+
     elif condition == "Poor":
+
         explanations.append(
-            ("Condition", "Poor condition significantly reduces estimated value.")
+            (
+                "Condition",
+                "Poor condition reduces estimated value."
+            )
         )
+
 
     if accident == "One or more reported":
+
         explanations.append(
-            ("History", "Reported accidents reduce the estimate.")
+            (
+                "History",
+                "Reported accidents reduce the estimate."
+            )
         )
+
 
     if service == "Strong / documented":
+
         explanations.append(
-            ("Service", "Strong service documentation improves confidence.")
+            (
+                "Service",
+                "Strong service documentation improves confidence."
+            )
         )
 
+
     if len(options) >= 3:
+
         explanations.append(
-            ("Options", "Multiple desirable options increase the estimate.")
+            (
+                "Options",
+                "Multiple desirable options increase the estimate."
+            )
         )
+
 
     for title, text in explanations:
 
         st.markdown(
             f"""
             <div class="info-box">
-                <div class="info-title">{title}</div>
-                <div class="info-text">{text}</div>
+
+                <div class="info-title">
+                {title}
+                </div>
+
+                <div class="info-text">
+                {text}
+                </div>
+
             </div>
             """,
             unsafe_allow_html=True
@@ -732,17 +942,23 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 
     # =====================================================
-    # CHECKLIST
+    # BUYER CHECKLIST
     # =====================================================
 
     st.markdown("""
     <div class="card">
-    <div class="card-title">🔍 Before You Buy</div>
+
+    <div class="card-title">
+    🔍 Before You Buy
+    </div>
+
     <div class="card-sub">
     A good price doesn't automatically mean it's a good BMW.
     </div>
+
     </div>
     """, unsafe_allow_html=True)
+
 
     checks = [
         (
@@ -763,21 +979,29 @@ if st.button("Analyze My BMW  →", use_container_width=True):
         ),
         (
             "Options",
-            "Confirm that the listed packages and features are actually installed."
+            "Confirm that listed packages and features are actually installed."
         ),
         (
             "Test drive",
-            "Listen for unusual noises and verify that all major systems work."
+            "Listen for unusual noises and verify that major systems work."
         )
     ]
+
 
     for title, text in checks:
 
         st.markdown(
             f"""
             <div class="info-box">
-                <div class="info-title">✓ {title}</div>
-                <div class="info-text">{text}</div>
+
+                <div class="info-title">
+                ✓ {title}
+                </div>
+
+                <div class="info-text">
+                {text}
+                </div>
+
             </div>
             """,
             unsafe_allow_html=True
@@ -790,8 +1014,11 @@ if st.button("Analyze My BMW  →", use_container_width=True):
 
 st.markdown("""
 <div class="footer">
+
 BMW DealCheck is an independent educational tool and is not
-affiliated with or endorsed by BMW AG.<br><br>
+affiliated with or endorsed by BMW AG.
+
+<br><br>
 
 DealCheck estimates are not professional appraisals.
 Actual vehicle values vary based on location, configuration,
@@ -799,6 +1026,7 @@ condition, history, options and current market demand.
 
 <br><br>
 
-BMW DealCheck • V3
+BMW DealCheck • V4
+
 </div>
 """, unsafe_allow_html=True)
